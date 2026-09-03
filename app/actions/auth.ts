@@ -75,7 +75,7 @@ export async function signup(formData: FormData) {
 
   redirect(
     role === 'doctor'
-      ? '/doctor/dashboard'
+      ? '/doctor/verify'
       : '/patient/dashboard'
   )
 }

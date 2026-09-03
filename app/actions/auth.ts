@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 
 export async function login(formData: FormData) {
   const supabase = createClient()
-  
+
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
@@ -16,10 +16,9 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    return { error: error.message }
+    redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
 
-  // Redirect based on role
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
@@ -27,7 +26,12 @@ export async function login(formData: FormData) {
     .single()
 
   revalidatePath('/', 'layout')
-  redirect(profile?.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard')
+
+  redirect(
+    profile?.role === 'doctor'
+      ? '/doctor/dashboard'
+      : '/patient/dashboard'
+  )
 }
 
 export async function signup(formData: FormData) {
@@ -44,10 +48,9 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    return { error: error.message }
+    redirect(`/signup?error=${encodeURIComponent(error.message)}`)
   }
 
-  // If email confirmation is disabled, user is immediately created and returned
   if (data.user) {
     const { error: profileError } = await supabase
       .from('profiles')
@@ -58,18 +61,29 @@ export async function signup(formData: FormData) {
       })
 
     if (profileError) {
-      // In a real app we might want to handle rollback or notify the user
       console.error('Failed to create profile:', profileError)
-      return { error: 'Failed to set up user profile' }
+
+      redirect(
+        `/signup?error=${encodeURIComponent(
+          'Failed to set up user profile'
+        )}`
+      )
     }
   }
 
   revalidatePath('/', 'layout')
-  redirect(role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard')
+
+  redirect(
+    role === 'doctor'
+      ? '/doctor/dashboard'
+      : '/patient/dashboard'
+  )
 }
 
 export async function logout() {
   const supabase = createClient()
+
   await supabase.auth.signOut()
+
   redirect('/login')
 }

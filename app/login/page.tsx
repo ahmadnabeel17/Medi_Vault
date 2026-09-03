@@ -1,6 +1,5 @@
 'use client'
 
-import { useActionState } from 'react'
 import { login } from '@/app/actions/auth'
 
 export default function LoginPage() {
@@ -53,7 +52,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
             Sign up
           </a>

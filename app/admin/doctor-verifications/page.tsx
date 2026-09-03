@@ -21,7 +21,6 @@ export default async function AdminDoctorVerificationsPage() {
   // Admin Actions
   async function updateStatus(id: string, status: 'manually_verified' | 'rejected') {
     'use server'
-    const supabaseAdmin = createClient() // Service role is not needed here if we disable RLS for admin, but let's assume we use the user's token. Wait, RLS on doctor_verifications only allows doctors to update their own!
     // We need to bypass RLS for this admin action. We'll use the service role key.
     const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
     const adminSupabase = createSupabaseClient(

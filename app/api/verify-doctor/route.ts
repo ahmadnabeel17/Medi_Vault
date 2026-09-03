@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 
-export async function POST(request: Request) {
+export async function POST() {
   // 1. Authenticate user using standard SSR client
   const cookieStore = cookies()
   const supabase = createServerClient(
@@ -127,7 +127,8 @@ Reasoning: ${parsedMessage.reasoning}`
       .eq('id', verification.id)
 
     return NextResponse.json({ success: true, status: newStatus })
-  } catch (error: any) {
+  } catch (err: unknown) {
+    const error = err as Error;
     console.error('AI Verification Error:', error)
     
     // On hard failure, flag for manual review

@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 
 export async function submitDoctorVerification(formData: FormData) {
   const supabase = createClient()
@@ -34,9 +33,7 @@ export async function submitDoctorVerification(formData: FormData) {
     return { error: 'Failed to upload certificate' }
   }
 
-  const { data: fileData } = supabase.storage
-    .from('doctor-certificates')
-    .getPublicUrl(filePath) // Or construct private URL if using private bucket (it's a private bucket, so publicUrl won't work for public access, but we'll use service role to read it later)
+
   
   // Insert into doctor_verifications
   const { error: insertError } = await supabase

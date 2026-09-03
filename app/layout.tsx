@@ -20,6 +20,18 @@ export default async function RootLayout({
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  let dashboardUrl = '/login'
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    if (profile) {
+      dashboardUrl = profile.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard'
+    }
+  }
+
   return (
     <html lang="en">
       <body className={`${inter.className} min-h-screen bg-slate-50 dark:bg-slate-950`}>
@@ -32,11 +44,16 @@ export default async function RootLayout({
             </div>
             <div className="flex items-center gap-4">
               {user ? (
-                <form action={logout}>
-                  <button type="submit" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    Logout
-                  </button>
-                </form>
+                <div className="flex items-center gap-6">
+                  <Link href={dashboardUrl} className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                  <form action={logout}>
+                    <button type="submit" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
+                      Logout
+                    </button>
+                  </form>
+                </div>
               ) : (
                 <div className="flex items-center gap-4">
                   <Link href="/login" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">

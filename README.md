@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MediVault
 
 Secure, intelligent, and seamless health data management at your fingertips.
@@ -28,3 +29,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+=======
+# Medi_Vault
+>>>>>>> ebb23999356827cd3c2974cd3f55614c7747767b
